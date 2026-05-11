@@ -1,6 +1,6 @@
 // Minimal service worker: cache-first for app shell, network for everything else.
 
-const CACHE_NAME = 'formula-note-v1';
+const CACHE_NAME = 'formula-note-v2';
 const ASSETS = [
   './',
   './index.html',

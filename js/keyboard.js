@@ -242,20 +242,42 @@ export class Keyboard {
       }
     };
 
+    // Mobile browsers synthesize mouse events after a touch ends. Without guarding,
+    // a single tap fires the action twice (once from touchend, once from mouseup).
+    // Track when the last touch happened and ignore mouse events shortly after.
+    let lastTouchAt = 0;
+    const SYNTHETIC_MOUSE_WINDOW_MS = 600;
+
     btn.addEventListener('touchstart', (e) => {
+      lastTouchAt = Date.now();
       const t = e.changedTouches[0];
       onStart(t.clientX, t.clientY);
     }, { passive: true });
     btn.addEventListener('touchend', (e) => {
+      lastTouchAt = Date.now();
       const t = e.changedTouches[0];
       onEnd(t.clientX, t.clientY, false);
+      // Suppress the synthetic click/mouseup that would otherwise re-fire this action.
+      if (e.cancelable) e.preventDefault();
     });
-    btn.addEventListener('touchcancel', () => onEnd(0, 0, true));
+    btn.addEventListener('touchcancel', () => {
+      lastTouchAt = Date.now();
+      onEnd(0, 0, true);
+    });
 
-    // Mouse support for desktop testing
-    btn.addEventListener('mousedown', (e) => onStart(e.clientX, e.clientY));
-    btn.addEventListener('mouseup', (e) => onEnd(e.clientX, e.clientY, false));
-    btn.addEventListener('mouseleave', () => onEnd(0, 0, true));
+    // Mouse support for desktop / non-touch testing only.
+    btn.addEventListener('mousedown', (e) => {
+      if (Date.now() - lastTouchAt < SYNTHETIC_MOUSE_WINDOW_MS) return;
+      onStart(e.clientX, e.clientY);
+    });
+    btn.addEventListener('mouseup', (e) => {
+      if (Date.now() - lastTouchAt < SYNTHETIC_MOUSE_WINDOW_MS) return;
+      onEnd(e.clientX, e.clientY, false);
+    });
+    btn.addEventListener('mouseleave', () => {
+      if (Date.now() - lastTouchAt < SYNTHETIC_MOUSE_WINDOW_MS) return;
+      onEnd(0, 0, true);
+    });
 
     // Long-press on variable buttons → remove
     let lpTimer = null;
