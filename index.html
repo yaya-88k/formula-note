@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#3a7fc1">
+  <title>FormulaNote</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FormulaNote">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <button class="header-btn" id="btn-menu" aria-label="メニュー">☰</button>
+      <span class="header-title" id="note-title">FormulaNote</span>
+      <button class="header-btn" id="btn-add-note" aria-label="新規メモ">＋</button>
+      <button class="header-btn" id="btn-save" aria-label="保存">💾</button>
+      <button class="header-btn" id="btn-settings" aria-label="設定">⚙</button>
+    </header>
+
+    <main class="editor">
+      <div id="lines" class="lines"></div>
+      <div id="status" class="status"></div>
+    </main>
+
+    <div id="keyboard" class="keyboard"></div>
+  </div>
+
+  <div id="backdrop" class="backdrop"></div>
+
+  <aside id="menu" class="menu">
+    <div class="menu-header">
+      <span>メモ一覧</span>
+    </div>
+    <div class="menu-title-row">
+      <label class="menu-label">タイトル</label>
+      <input type="text" id="menu-title-edit" class="menu-title-input">
+    </div>
+    <div id="menu-list" class="menu-list"></div>
+  </aside>
+
+  <aside id="settings-panel" class="settings">
+    <div class="settings-header">
+      <span>設定</span>
+      <button id="settings-close" class="settings-close">×</button>
+    </div>
+    <div class="settings-section">
+      <h3>数値の表示</h3>
+      <label class="setting-row">
+        <span>3桁区切り（カンマ）</span>
+        <input type="checkbox" id="set-grouping">
+      </label>
+      <label class="setting-row">
+        <span>末尾の0を省略</span>
+        <input type="checkbox" id="set-trim">
+      </label>
+      <label class="setting-row">
+        <span>小数桁数の上限: <span id="set-decimals-val">8</span></span>
+        <input type="range" id="set-decimals" min="0" max="15" step="1">
+      </label>
+    </div>
+    <div class="settings-section">
+      <h3>外観</h3>
+      <label class="setting-row">
+        <span>テーマ</span>
+        <select id="set-theme">
+          <option value="light">ライト</option>
+          <option value="dark">ダーク</option>
+        </select>
+      </label>
+    </div>
+    <div class="settings-section">
+      <button id="set-reset" class="settings-reset">初期値に戻す</button>
+    </div>
+    <div class="settings-section settings-help">
+      <h3>使い方</h3>
+      <ul>
+        <li>各行に式を入力すると右側に結果が出ます</li>
+        <li><code>a = 12</code> で変数を定義、以降の行で <code>a</code> を使えます</li>
+        <li>同じ名前を後の行で再定義すると、それより下の行に反映されます</li>
+        <li><code>512a</code> のような暗黙の乗算もOK</li>
+        <li>キーボードの数字/演算ボタンは上下スワイプで関連機能（例: sin↑=asin, sin↓=sinh）</li>
+        <li>左右スワイプでキーボードのページ切替</li>
+        <li><code>//</code> 以降は注釈（評価対象外）。<code>ABC</code> ボタンでOSキーボードに切替</li>
+      </ul>
+    </div>
+  </aside>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

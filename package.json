@@ -1,0 +1,15 @@
+{
+  "name": "formula-note",
+  "version": "0.1.0",
+  "description": "メモ帳のように計算式を縦に並べて結果を見られる、CalcNote風のPWA電卓アプリ",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "npx serve .",
+    "icons": "node tools/generate-icons.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  },
+  "license": "MIT"
+}
